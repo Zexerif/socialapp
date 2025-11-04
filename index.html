@@ -1,24 +1,296 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameShare</title>
-    <link rel="stylesheet" href="style.css">
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameFeed - Your Gaming Community</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#7f13ec",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#191022",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h1>GameShare</h1>
-    </header>
-    <main>
-        <div id="posts"></div>
-        <form id="post-form">
-            <input type="text" id="game-title" placeholder="Game Title" required>
-            <textarea id="game-review" placeholder="Your Review" required></textarea>
-            <input type="number" id="game-rating" placeholder="Rating (1-5)" min="1" max="5" required>
-            <button type="submit">Post Review</button>
-        </form>
-    </main>
-    <script src="script.js"></script>
-</body>
-</html>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="w-full min-h-screen">
+<div class="max-w-screen-2xl mx-auto grid grid-cols-12 gap-8 px-4 sm:px-6 lg:px-8">
+<!-- Left Sidebar -->
+<aside class="col-span-2 hidden lg:block sticky top-0 h-screen py-8">
+<div class="flex flex-col h-full bg-transparent">
+<!-- Profile Widget -->
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12" data-alt="User avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDBxgnhvs6Dg26y7ddXD3qnskivIEtl1xTOpeRJf80WxIZtZkL5RnL8f7Tp-QtQHqA9mGHKK-OAvCpi9YXzw1zUtqvLLyu3-tjurO83jgovQV5ZdTldQlXo4qPuxiE15YgsrMwCWljGRHP_hmb7Z8uPp1ruC3sN8Gl_S84S1v_tAOQWfZBFxKxTcBE9o0eI5NQ0UF19PCa-hJvmaDq2fvDs3dTLd_jfE57r2jdZJJxc_aQ28fKqbo7w0RqTjZDW87ZlRYy-iKIK9TU");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-bold leading-normal">Alex Drake</h1>
+<p class="text-[#ad92c9] text-sm font-normal leading-normal">Level 21 Pro</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-4 px-4 py-3 rounded-full bg-primary/20 text-white" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-sm font-bold leading-normal">Home</p>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-full hover:bg-primary/20 text-[#ad92c9] hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">explore</span>
+<p class="text-sm font-medium leading-normal">Discover</p>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-full hover:bg-primary/20 text-[#ad92c9] hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">video_library</span>
+<p class="text-sm font-medium leading-normal">My Library</p>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-full hover:bg-primary/20 text-[#ad92c9] hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<p class="text-sm font-medium leading-normal">Friends</p>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-full hover:bg-primary/20 text-[#ad92c9] hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+</nav>
+<!-- Primary Action Button -->
+<div class="mt-auto">
+<button id="write-review-button" class="flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-4 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/80 transition-colors duration-200">
+<span class="truncate">Write a Review</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Center Column -->
+<main class="col-span-12 lg:col-span-7 xl:col-span-6 border-x border-white/10 min-h-screen">
+<div class="sticky top-0 bg-background-dark/80 backdrop-blur-md z-10 pt-4">
+<!-- Filter Tabs -->
+<div class="pb-3 px-4">
+<div id="filter-tabs" class="flex border-b border-[#4d3267] gap-2 sm:gap-8">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-white pb-[13px] pt-4 px-2 sm:px-4" href="#" data-filter="for-you">
+<p class="text-white text-sm font-bold leading-normal tracking-[0.015em]">For You</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#ad92c9] pb-[13px] pt-4 px-2 sm:px-4 hover:border-b-primary/50 hover:text-white transition-colors duration-200" href="#" data-filter="friends">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Friends</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#ad92c9] pb-[13px] pt-4 px-2 sm:px-4 hover:border-b-primary/50 hover:text-white transition-colors duration-200" href="#" data-filter="following">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Following</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#ad92c9] pb-[13px] pt-4 px-2 sm:px-4 hover:border-b-primary/50 hover:text-white transition-colors duration-200" href="#" data-filter="trending">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Trending</p>
+</a>
+</div>
+</div>
+</div>
+<!-- Composer -->
+<div id="composer" class="flex items-start px-4 py-4 gap-3 border-b border-white/10">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 shrink-0" data-alt="User avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBHPf3JSQ8QMHus3cM7n790yiNLtNP-mJPTmVeFe8AkD6PklrAPDkoaIe_1oWlPu-sqcBjuAagq8BhJWkvN9mEsaQ6MPKm-PSpHqeZp8MwpCel9uS3KAlBfaMMaop4PwKwBrghDGTxvCg-_SQFxPE9rd8ehOpMrMTr4OzLSs1V5L2ms3J0PnMSRwuhMdCI9RsPIYxzwrDzTT4VN9ikKuKJph-9pQZ__rbn4sXTSur73s9jJOZNEyLaSdmHzBMjecgnFcwc7cSrCXKY");'></div>
+<div class="flex-1">
+    <input type="text" id="game-title-input" class="form-input flex w-full min-w-0 flex-1 bg-transparent text-white focus:outline-0 focus:ring-0 border-0 p-0 text-xl font-bold leading-tight tracking-[-0.015em] placeholder:text-[#69458c]" placeholder="What game are you reviewing?">
+    <div class="my-2 border-b border-white/10"></div>
+    <textarea id="composer-textarea" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden bg-transparent text-white focus:outline-0 focus:ring-0 border-0 p-0 text-lg font-normal leading-normal placeholder:text-[#69458c]" placeholder="Share your review..." rows="3"></textarea>
+    <div class="flex items-center gap-2 mt-4">
+        <p class="text-[#ad92c9] text-sm font-medium">Your rating:</p>
+        <div id="star-rating" class="flex items-center text-yellow-400">
+            <span class="material-symbols-outlined !text-2xl cursor-pointer" data-value="1">star</span>
+            <span class="material-symbols-outlined !text-2xl cursor-pointer" data-value="2">star</span>
+            <span class="material-symbols-outlined !text-2xl cursor-pointer" data-value="3">star</span>
+            <span class="material-symbols-outlined !text-2xl cursor-pointer" data-value="4">star</span>
+            <span class="material-symbols-outlined !text-2xl cursor-pointer" data-value="5">star</span>
+        </div>
+    </div>
+    <div class="flex items-center justify-between mt-4">
+        <div class="flex items-center gap-1">
+            <button class="flex items-center justify-center p-2 rounded-full hover:bg-primary/20 text-primary">
+                <span class="material-symbols-outlined text-xl">image</span>
+            </button>
+            <button class="flex items-center justify-center p-2 rounded-full hover:bg-primary/20 text-primary">
+                <span class="material-symbols-outlined text-xl">link</span>
+            </button>
+            <button class="flex items-center justify-center p-2 rounded-full hover:bg-primary/20 text-primary">
+                <span class="material-symbols-outlined text-xl">add_reaction</span>
+            </button>
+        </div>
+        <button id="post-button" class="min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-9 px-5 bg-primary text-white text-sm font-bold leading-normal hover:bg-primary/80 transition-colors duration-200">
+            <span class="truncate">Post</span>
+        </button>
+    </div>
+</div>
+</div>
+<!-- Feed Items -->
+<div class="divide-y divide-white/10">
+<!-- Review Card 1 -->
+<article class="p-4 @container hover:bg-white/5 transition-colors duration-200">
+<div class="flex flex-col items-stretch justify-start">
+<div class="flex items-center gap-3 mb-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Reviewer's avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA6CoMxxXFiYIBZV6I5uovKvZBisc2Zth56ZENOgokVb4EGAC6IOOSZIXF3pwBOdfOr9jjXhSfXXybQSvuwi1RfPeUT9dp04kZrwvgO57jMOA2MrThY2PlbyXpJAENHr-j6lonmfWqmCCQFvL4xvvxJTC7tvEGpN0DgDMIJE20ZYyGRCc4XRsGHlHLePuGCItQJRoFhXbPOraEGG5XJoS-koF54eoC5qhfRFovdd9BKjmKfUJa3jNaRiFk6bKGkVepX8ZpdP6G0tfk");'></div>
+<div>
+<p class="text-white text-base font-bold leading-tight">Jane Doe <span class="text-[#ad92c9] font-normal">reviewed</span></p>
+<p class="text-[#ad92c9] text-sm">2 hours ago</p>
+</div>
+</div>
+<div class="flex flex-col @[480px]:flex-row @[480px]:items-start gap-4">
+<div class="w-full @[480px]:w-48 @[480px]:flex-shrink-0 bg-center bg-no-repeat aspect-[3/4] bg-cover rounded" data-alt="Game cover art for Cyberpunk 2077" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuASeZBWzMnLCiTUaW4FZCUCtXAmOF_1V6JhUqIymG1Xt0bmbqa_WbU7H4o8rDLzruTMr1s1roCIgbKqB_J0VuKhFXciQ56reYsfNm5Mq19y8JJDgCSssDkVRuLFav9zdNkKtZtIpbMaOhrq6VlZe_CB9ksU4CKo5T8gNKkRGbLAXQelOi4bc_zTL_ZyCCbfaSLmEcCA85HnAwSym2NmAVbtHXJHCe4XvHiPdLW0WPhJl7K--yq_MzwojSt0d41ykHzdqaGcHBnvYks");'></div>
+<div class="flex w-full grow flex-col items-stretch justify-center gap-2">
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">Cyberpunk 2077 (PC)</h2>
+<div class="flex items-center text-yellow-400">
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined !text-xl">star</span>
+<span class="text-white ml-2 text-sm font-bold">4/5 Stars</span>
+</div>
+<p class="text-[#ad92c9] text-base font-normal leading-normal">
+                                        An immersive, sprawling RPG that shines brightest after its latest updates. The world of Night City is a stunning technical achievement, filled with compelling stories and unforgettable characters.
+                                    </p>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 py-2">
+<button class="flex items-center justify-center gap-2 px-3 py-2 text-[#ad92c9] hover:text-primary rounded-full hover:bg-primary/10 transition-colors duration-200" data-action="like">
+<span class="material-symbols-outlined">thumb_up</span>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em]">1.2k</p>
+</button>
+<button class="flex items-center justify-center gap-2 px-3 py-2 text-[#ad92c9] hover:text-primary rounded-full hover:bg-primary/10 transition-colors duration-200" data-action="comment">
+<span class="material-symbols-outlined">chat_bubble</span>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em]">345</p>
+</button>
+<button class="flex items-center justify-center gap-2 px-3 py-2 text-[#ad92c9] hover:text-primary rounded-full hover:bg-primary/10 transition-colors duration-200" data-action="share">
+<span class="material-symbols-outlined">share</span>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em]">98</p>
+</button>
+</div>
+</article>
+<!-- Activity Card -->
+<article class="p-4 hover:bg-white/5 transition-colors duration-200">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">stadia_controller</span>
+<div class="flex-1">
+<p class="text-white">
+<span class="font-bold">John Smith</span> started playing <span class="font-bold">The Witcher 3: Wild Hunt</span>.
+                                </p>
+<p class="text-sm text-[#ad92c9]">5 hours ago</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded size-16" data-alt="Game cover art for The Witcher 3" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC5WUV9qIWWDlZjLugV4DnvtcevOH8dICjNXcrS3-rGdQsobiL7plUC5v34pwUizFdtT2j3OvxshgVLmETzHCVmneat_o04HwOSSD43uJ0btX5VWD6AjcFa8tPrluNA17aWAHmAP4OnxHMk1qIJnd5QlmSX_Mas7J_sHTacUFzBLx7hj_-rd2YG_YLY5IEufFbozUquRs3dkvyYHzgwe_MHadfR1OOaRkAHl6r-8Si6nt-P3P0CtZVLOMr_siXHd5mctUtCUDsBCt8");'></div>
+</div>
+</article>
+<!-- Review Card 2 -->
+<article class="p-4 @container hover:bg-white/5 transition-colors duration-200">
+<div class="flex flex-col items-stretch justify-start">
+<div class="flex items-center gap-3 mb-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Reviewer's avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC3AX_v14Yu0Cd7KH9qvlRxVLUQ2XWaSUeHuh3Lx968EeFNN2k51esGskbFg5Ui6l4o9Hi7w7Mt93VaHljoNvQvUVRi3GqkE06r5NWhkr7XTQiOLPFOjddAilVFbVAOhRR0_NwVkgk2UezLe3Czy72nStuAu3ImlpmB_8xBszWozfFclyMErMFUtATiHVJtTrckqAbj0y3ymXsQbS18GfZHOZOthuXeWsHoZt6F_VZoLO6WIgpl29B0QOi3pMe7GGvHNB7HY1KrRMM");'></div>
+<div>
+<p class="text-white text-base font-bold leading-tight">Maria Garcia <span class="text-[#ad92c9] font-normal">reviewed</span></p>
+<p class="text-[#ad92c9] text-sm">Yesterday</p>
+</div>
+</div>
+<div class="flex flex-col @[480px]:flex-row @[480px]:items-start gap-4">
+<div class="w-full @[480px]:w-48 @[480px]:flex-shrink-0 bg-center bg-no-repeat aspect-[3/4] bg-cover rounded" data-alt="Game cover art for Elden Ring" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBK8-4wHWC8HMff_gXhlYxnIJF9lDtI35q_YKseFYBYqVblhlQ5r6to1bIoKzqKGWhT20cUufqpEJlDYHisFLR71cKy5FVBiIuEcfE1940THj6wvtxWi5coyiBsENb5wnOUu7mfod1tM-REnPEqHV4uYNeIcGQMCvgD0YU24_I-vDaX_H356JtVe0cfUBOm_4YzFGzX6u0jFcD9vpOiY89OXjuZncujZgnZfoVeEMbR7aCLmDTtYjlJnQrNgL9GblX69HQZCicFfuE");'></div>
+<div class="flex w-full grow flex-col items-stretch justify-center gap-2">
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">Elden Ring (PS5)</h2>
+<div class="flex items-center text-yellow-400">
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="text-white ml-2 text-sm font-bold">5/5 Stars</span>
+</div>
+<p class="text-[#ad92c9] text-base font-normal leading-normal">
+                                        A masterpiece of open-world design. FromSoftware has delivered an unforgettable adventure that will be talked about for years to come. Absolutely essential.
+                                    </p>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 py-2">
+<button class="flex items-center justify-center gap-2 px-3 py-2 text-[#ad92c9] hover:text-primary rounded-full hover:bg-primary/10 transition-colors duration-200" data-action="like">
+<span class="material-symbols-outlined">thumb_up</span>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em]">3.8k</p>
+</button>
+<button class="flex items-center justify-center gap-2 px-3 py-2 text-[#ad92c9] hover:text-primary rounded-full hover:bg-primary/10 transition-colors duration-200" data-action="comment">
+<span class="material-symbols-outlined">chat_bubble</span>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em]">781</p>
+</button>
+<button class="flex items-center justify-center gap-2 px-3 py-2 text-[#ad92c9] hover:text-primary rounded-full hover:bg-primary/10 transition-colors duration-200" data-action="share">
+<span class="material-symbols-outlined">share</span>
+<p class="text-[13px] font-bold leading-normal tracking-[0.015em]">412</p>
+</button>
+</div>
+</article>
+</div>
+</main>
+<!-- Right Sidebar -->
+<aside class="col-span-3 hidden xl:block sticky top-0 h-screen py-8">
+<div class="flex flex-col gap-8">
+<!-- Trending Games Widget -->
+<div class="bg-white/5 rounded p-4">
+<h3 class="text-white font-bold text-lg mb-4">Trending Games</h3>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-[4/3] bg-cover rounded w-20" data-alt="Trending game 1 cover art" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAqoVOiudPKp_eWbRiQ1eHBj-lbHEfL2sbmgrKyTUDJ8ClNWkBrzjdgEARhIWxZ7fHNHYfXH23W4BroJPSrj85t6kIXbaMhcVlx4obQg6vno-VTy1_P5E-8wUG1QjSHAqN8Eki_nQVKsEBL9CTGN6exY4ch7gf2H08a3Xosu-q-Ow8eCaB1vNci7M-sE6Zu7Ah5Z3O9Og2niakFSQUxRc-OtxruYf9NEuSr4HCb0rouwCnC74RId2JdQlLBe_buweCTzAXPQcTMI1o");'></div>
+<p class="text-white font-semibold text-sm">Starfield</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-[4/3] bg-cover rounded w-20" data-alt="Trending game 2 cover art" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCm-FjaTPs9xsX4f6sTbYnTGMUsBi_F3bFqnEA8_4piM2J1fgjnnU9jUZRoU6RypZDWlG37vTKK02qAOa9FpvSwCv1TeHoyul6S9QjDJpMHcTwTgnxOA3SvF4tk5oACQ6bmPFS0Zfvdp5728Nhs6iXO3hXDzYE8-iqhJj0gVH7KHGpiSd3c4MR4vXcP4OdIFSqYRBLf81yaEaPuMBUZ5BxHhmVXZelcgJHsTKh_h5h9bnJPkH2U8k8Y5FTdBWsR3hl-0EpwKVU4M9E");'></div>
+<p class="text-white font-semibold text-sm">Marvel's Spider-Man 2</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-[4/3] bg-cover rounded w-20" data-alt="Trending game 3 cover art" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAfwDN_BBV6QQBUjnkNugVY0bT6CBwDuD3lYjnItg70vaSssNcO_MkseZODHy7JFyYkSmYNOL56CusCL6Lr1LW-W4_CPJfMA9PdD0JTbcBHNj7Yr4U7u55mgdIFm0vXOMQvCSlZHboxQ4JV2zVY5-fuUAVkxBnRXKGadeZUZeMYif-xGrFvoZkr5mWheZoDkx47mMCohvPP4bb_UWXoGgLoLZhmvBpbAkuz-mt7wimT4wd68G14lRrAy_2mtk8sKklSi7O8B28DR94");'></div>
+<p class="text-white font-semibold text-sm">Baldur's Gate 3</p>
+</div>
+</div>
+</div>
+<!-- Who to Follow Widget -->
+<div class="bg-white/5 rounded p-4">
+<h3 class="text-white font-bold text-lg mb-4">Who to Follow</h3>
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User to follow avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwPVRK8sQ8yj-2WaHHDdtWfSbVfhQnOKZbSArM_RbK_XNmgmISoh3vI5xAD99b_QhgJo10hPrbii8Pox6S4HW221NRuDKpvEO9yMBJcggeJinmJDDFpqkPRdXqnIi_U4m-50aPgsS0hs1jnnZt5k7dXkyFG49qlq3tAeUjHNsF-EA5jt2vT_F5aFTOjxpMFPyRQ7AtGqO3s5vz60-jMJH8tJiKl2UHaKI7vr6tLnMYj06-DqxaO8AJ0UsO-ia9Kofv5E_mbLo_BA0");'></div>
+<div>
+<p class="text-white font-semibold text-sm">GameSpot</p>
+<p class="text-xs text-[#ad92c9]">@gamespot</p>
+</div>
+</div>
+<button class="rounded-full px-4 py-1.5 text-sm font-bold bg-white text-black hover:bg-white/80 transition-colors duration-200">Follow</button>
+</div>
+<div class="flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User to follow avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCxCb2KJZtNp-5r2wbzRhXfzXnXlqmq4EcYK0ixz7Onyv2UdDZVEUFKAhV4bxBzky61AfnliY5H3xVICpOyl_99tMrOJ8xr2MtSDVr9C70QC5oW_JHwpnTUjYM0SxvOGDb5191vFPGY56Fxkp15SyhI7XQAmcT7Xz8_-1uhLnwXw1tLprcmYYtqT5imxz_6lLifAaWoLNZDobiP-Re5YPVI86Eh1K3CcnFEMVsZ5CwT_j-Di0nhUqaH_Uwb5IMZlOBQZb9j0OMaM9Y");'></div>
+<div>
+<p class="text-white font-semibold text-sm">IGN</p>
+<p class="text-xs text-[#ad92c9]">@ign</p>
+</div>
+</div>
+<button class="rounded-full px-4 py-1.5 text-sm font-bold bg-white text-black hover:bg-white/80 transition-colors duration-200">Follow</button>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</body></html>
